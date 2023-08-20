@@ -1,0 +1,47 @@
+
+.anchor
+.DS_Store
+target
+node_modules
+dist
+build
+test-ledger
+
+# dependencies
+app/node_modules
+app/.pnp
+app/.pnp.js
+
+# testing
+app/coverage
+
+# next.js
+app/.next/
+app/out/
+
+# production
+app/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+app/.env.local
+app/.env.development.local
+app/.env.test.local
+app/.env.production.local
+
+# vercel
+app/.vercel
+
+# typescript
+app/*.tsbuildinfo
+
+# logs
+app/*.log
