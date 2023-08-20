@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.28.0",
+    "@coral-xyz/borsh": "^0.28.0",
     "@heroicons/react": "^1.0.5",
     "@metaplex-foundation/mpl-token-metadata": "^1.2",
     "@noble/ed25519": "^1.7.1",
