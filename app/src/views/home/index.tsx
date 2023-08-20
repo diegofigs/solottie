@@ -1,7 +1,6 @@
-import { FC } from "react";
 import Link from "next/link";
 
-export const HomeView: FC = () => {
+export function HomeView() {
   return (
     <div className="md:hero mx-auto p-4">
       <div className="md:hero-content flex flex-col">
@@ -10,8 +9,8 @@ export const HomeView: FC = () => {
             Solottie
           </h1>
         </div>
-        <h4 className="md:w-full text-2x1 md:text-4xl text-center text-slate-300 my-2">
-          <p>Stake for the chance to win extra yield!</p>
+        <h4 className="md:w-full text-2x1 md:text-3xl text-center text-slate-300 my-2">
+          <p className="text-slate-700">Lottery Protocol that's OPOS</p>
           <p className="text-slate-500 text-2x1 leading-relaxed">
             Support the network.
           </p>
@@ -37,4 +36,4 @@ export const HomeView: FC = () => {
       </div>
     </div>
   );
-};
+}

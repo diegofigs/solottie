@@ -45,17 +45,13 @@ export default function Pool({
   return (
     <div>
       <Head>
-        <title>Lottie</title>
-        <meta
-          name="description"
-          content="Redifining distribution thru lottery systems"
-        />
+        <title>Lottie: Pool {id}</title>
+        <meta name="description" content="A Lottery Protocol on Solana" />
       </Head>
       <div className="md:hero mx-auto p-2">
         <div className="md:hero-content flex flex-col">
           <div className="max-w-screen-lg w-full">
-            <div className="flex justify-between gap-2 my-2">
-            </div>
+            <div className="flex justify-between gap-2 my-2"></div>
             <div className="grid grid-cols-1 md:grid-cols-7 items-center gap-2">
               <div className="col-span-1 md:col-span-4">
                 <StakeCard pool={lotteryPool} id={new PublicKey(id)} />

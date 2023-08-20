@@ -18,11 +18,8 @@ const Pools: NextPage = ({
   return (
     <div>
       <Head>
-        <title>Lottie</title>
-        <meta
-          name="description"
-          content="Redifining distribution thru lottery systems"
-        />
+        <title>Lottie: Pools</title>
+        <meta name="description" content="A Lottery Protocol on Solana" />
       </Head>
       <div className="md:hero mx-auto p-2">
         <div className="md:hero-content flex flex-col">
