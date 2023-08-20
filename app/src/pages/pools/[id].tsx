@@ -10,7 +10,6 @@ import { LotteryPool, LotteryPoolJSON } from "program/accounts";
 import { PublicKey } from "@solana/web3.js";
 import { useQuery } from "@tanstack/react-query";
 import { LotteryPoolCard } from "components/LotteryPoolCard";
-import { MintBsol } from "components/MintBsol";
 import { StakeCard } from "components/StakeCard";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -56,7 +55,6 @@ export default function Pool({
         <div className="md:hero-content flex flex-col">
           <div className="max-w-screen-lg w-full">
             <div className="flex justify-between gap-2 my-2">
-              <MintBsol />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-7 items-center gap-2">
               <div className="col-span-1 md:col-span-4">

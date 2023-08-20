@@ -1,6 +1,5 @@
 import { CreateLotteryForm } from "components/CreateLotteryForm";
 import { LotteryPoolList } from "components/LotteryPoolList";
-import { MintBsol } from "components/MintBsol";
 import Modal from "components/Modal";
 import { getAllLotteryPools } from "core/getAllLotteryPools";
 import type { InferGetStaticPropsType, NextPage } from "next";
@@ -28,7 +27,6 @@ const Pools: NextPage = ({
       <div className="md:hero mx-auto p-2">
         <div className="md:hero-content flex flex-col">
           <div className="flex justify-between gap-2 p-2 my-2">
-            <MintBsol />
             <Modal title="Create Lottery">
               <CreateLotteryForm />
             </Modal>
