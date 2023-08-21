@@ -4,30 +4,20 @@ import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-esl
 import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
 import { PROGRAM_ID } from "../programId"
 
-export interface StartAccounts {
+export interface ClosePoolAccounts {
   signer: PublicKey
-  /** Lottery Pool account stores pool metadata. */
   lotteryPool: PublicKey
-  /** Mint account is the stakeable token. */
-  mint: PublicKey
-  switchboardAggregator: PublicKey
 }
 
-export function start(
-  accounts: StartAccounts,
+export function closePool(
+  accounts: ClosePoolAccounts,
   programId: PublicKey = PROGRAM_ID
 ) {
   const keys: Array<AccountMeta> = [
     { pubkey: accounts.signer, isSigner: true, isWritable: true },
     { pubkey: accounts.lotteryPool, isSigner: false, isWritable: true },
-    { pubkey: accounts.mint, isSigner: false, isWritable: false },
-    {
-      pubkey: accounts.switchboardAggregator,
-      isSigner: false,
-      isWritable: false,
-    },
   ]
-  const identifier = Buffer.from([62, 15, 117, 236, 47, 1, 89, 139])
+  const identifier = Buffer.from([140, 189, 209, 23, 239, 62, 239, 11])
   const data = identifier
   const ix = new TransactionInstruction({ keys, programId, data })
   return ix

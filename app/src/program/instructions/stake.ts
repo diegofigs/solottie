@@ -1,37 +1,33 @@
-import {
-  TransactionInstruction,
-  PublicKey,
-  AccountMeta,
-} from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId";
+import { TransactionInstruction, PublicKey, AccountMeta } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId"
 
 export interface StakeArgs {
-  amount: BN;
+  amount: BN
 }
 
 export interface StakeAccounts {
-  signer: PublicKey;
+  signer: PublicKey
   /** Lottery Pool account stores pool metadata. */
-  lotteryPool: PublicKey;
+  lotteryPool: PublicKey
   /** Stake Token account holds token deposits. */
-  stakeToken: PublicKey;
+  stakeToken: PublicKey
   /** User Token account is used to transfer tokens from. */
-  userToken: PublicKey;
+  userToken: PublicKey
   /** User Ticket account is used to transfer tickets to. */
-  userTicket: PublicKey;
+  userTicket: PublicKey
   /** Ticket Mint account represents stake receipts. */
-  ticketMint: PublicKey;
+  ticketMint: PublicKey
   /** Mint account is the stakeable token. */
-  mint: PublicKey;
-  tokenProgram: PublicKey;
-  associatedTokenProgram: PublicKey;
-  systemProgram: PublicKey;
+  mint: PublicKey
+  tokenProgram: PublicKey
+  associatedTokenProgram: PublicKey
+  systemProgram: PublicKey
 }
 
-export const layout = borsh.struct([borsh.u64("amount")]);
+export const layout = borsh.struct([borsh.u64("amount")])
 
 export function stake(
   args: StakeArgs,
@@ -53,16 +49,16 @@ export function stake(
       isWritable: false,
     },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
-  ];
-  const identifier = Buffer.from([206, 176, 202, 18, 200, 209, 179, 108]);
-  const buffer = Buffer.alloc(1000);
+  ]
+  const identifier = Buffer.from([206, 176, 202, 18, 200, 209, 179, 108])
+  const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
       amount: args.amount,
     },
     buffer
-  );
-  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len);
-  const ix = new TransactionInstruction({ keys, programId, data });
-  return ix;
+  )
+  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len)
+  const ix = new TransactionInstruction({ keys, programId, data })
+  return ix
 }

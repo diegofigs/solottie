@@ -1,6 +1,6 @@
-import * as FeedErrorCode from "./FeedErrorCode";
+import * as FeedErrorCode from "./FeedErrorCode"
 
-export { FeedErrorCode };
+export { FeedErrorCode }
 
-export type FeedErrorCodeKind = FeedErrorCode.StaleFeed;
-export type FeedErrorCodeJSON = FeedErrorCode.StaleFeedJSON;
+export type FeedErrorCodeKind = FeedErrorCode.StaleFeed
+export type FeedErrorCodeJSON = FeedErrorCode.StaleFeedJSON

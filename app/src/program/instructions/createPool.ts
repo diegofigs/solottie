@@ -1,42 +1,37 @@
-import {
-  TransactionInstruction,
-  PublicKey,
-  AccountMeta,
-} from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId";
+import { TransactionInstruction, PublicKey, AccountMeta } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId"
 
 export interface CreatePoolArgs {
-  startTime: BN;
-  endTime: BN;
-  tokenName: string;
+  startTime: BN
+  endTime: BN
+  tokenName: string
 }
 
 export interface CreatePoolAccounts {
-  signer: PublicKey;
-  /** Lottery Pool account stores pool metadata. */
-  lotteryPool: PublicKey;
+  signer: PublicKey
+  lotteryPool: PublicKey
   /** Stake Token account holds token deposits. */
-  stakeToken: PublicKey;
+  stakeToken: PublicKey
   /** Ticket Mint account represents stake receipts. */
-  ticketMint: PublicKey;
-  ticketMintMetadata: PublicKey;
+  ticketMint: PublicKey
+  ticketMintMetadata: PublicKey
   /** Mint account is the stakeable token. */
-  mint: PublicKey;
-  switchboardAggregator: PublicKey;
-  tokenMetadataProgram: PublicKey;
-  tokenProgram: PublicKey;
-  systemProgram: PublicKey;
-  rent: PublicKey;
+  mint: PublicKey
+  switchboardAggregator: PublicKey
+  tokenMetadataProgram: PublicKey
+  tokenProgram: PublicKey
+  systemProgram: PublicKey
+  rent: PublicKey
 }
 
 export const layout = borsh.struct([
   borsh.i64("startTime"),
   borsh.i64("endTime"),
   borsh.str("tokenName"),
-]);
+])
 
 export function createPool(
   args: CreatePoolArgs,
@@ -63,9 +58,9 @@ export function createPool(
     { pubkey: accounts.tokenProgram, isSigner: false, isWritable: false },
     { pubkey: accounts.systemProgram, isSigner: false, isWritable: false },
     { pubkey: accounts.rent, isSigner: false, isWritable: false },
-  ];
-  const identifier = Buffer.from([233, 146, 209, 142, 207, 104, 64, 188]);
-  const buffer = Buffer.alloc(1000);
+  ]
+  const identifier = Buffer.from([233, 146, 209, 142, 207, 104, 64, 188])
+  const buffer = Buffer.alloc(1000)
   const len = layout.encode(
     {
       startTime: args.startTime,
@@ -73,8 +68,8 @@ export function createPool(
       tokenName: args.tokenName,
     },
     buffer
-  );
-  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len);
-  const ix = new TransactionInstruction({ keys, programId, data });
-  return ix;
+  )
+  const data = Buffer.concat([identifier, buffer]).slice(0, 8 + len)
+  const ix = new TransactionInstruction({ keys, programId, data })
+  return ix
 }

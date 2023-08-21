@@ -1,59 +1,59 @@
-import { PublicKey, Connection } from "@solana/web3.js";
-import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId";
+import { PublicKey, Connection } from "@solana/web3.js"
+import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId"
 
 export interface LotteryPoolFields {
-  mint: PublicKey;
-  startTime: BN;
-  endTime: BN;
-  startedAt: BN | null;
-  settledAt: BN | null;
-  startRate: BN | null;
-  endRate: BN | null;
-  holders: Array<PublicKey>;
-  amounts: Array<BN>;
-  supply: BN;
-  winner: PublicKey | null;
-  bump: number;
-  switchboardAggregator: PublicKey;
+  mint: PublicKey
+  startTime: BN
+  endTime: BN
+  startedAt: BN | null
+  settledAt: BN | null
+  startRate: BN | null
+  endRate: BN | null
+  holders: Array<PublicKey>
+  amounts: Array<BN>
+  supply: BN
+  winner: PublicKey | null
+  bump: number
+  switchboardAggregator: PublicKey
 }
 
 export interface LotteryPoolJSON {
-  mint: string;
-  startTime: string;
-  endTime: string;
-  startedAt: string | null;
-  settledAt: string | null;
-  startRate: string | null;
-  endRate: string | null;
-  holders: Array<string>;
-  amounts: Array<string>;
-  supply: string;
-  winner: string | null;
-  bump: number;
-  switchboardAggregator: string;
+  mint: string
+  startTime: string
+  endTime: string
+  startedAt: string | null
+  settledAt: string | null
+  startRate: string | null
+  endRate: string | null
+  holders: Array<string>
+  amounts: Array<string>
+  supply: string
+  winner: string | null
+  bump: number
+  switchboardAggregator: string
 }
 
 export class LotteryPool {
-  readonly mint: PublicKey;
-  readonly startTime: BN;
-  readonly endTime: BN;
-  readonly startedAt: BN | null;
-  readonly settledAt: BN | null;
-  readonly startRate: BN | null;
-  readonly endRate: BN | null;
-  readonly holders: Array<PublicKey>;
-  readonly amounts: Array<BN>;
-  readonly supply: BN;
-  readonly winner: PublicKey | null;
-  readonly bump: number;
-  readonly switchboardAggregator: PublicKey;
+  readonly mint: PublicKey
+  readonly startTime: BN
+  readonly endTime: BN
+  readonly startedAt: BN | null
+  readonly settledAt: BN | null
+  readonly startRate: BN | null
+  readonly endRate: BN | null
+  readonly holders: Array<PublicKey>
+  readonly amounts: Array<BN>
+  readonly supply: BN
+  readonly winner: PublicKey | null
+  readonly bump: number
+  readonly switchboardAggregator: PublicKey
 
   static readonly discriminator = Buffer.from([
     96, 45, 253, 200, 241, 39, 133, 245,
-  ]);
+  ])
 
   static readonly layout = borsh.struct([
     borsh.publicKey("mint"),
@@ -69,22 +69,22 @@ export class LotteryPool {
     borsh.option(borsh.publicKey(), "winner"),
     borsh.u8("bump"),
     borsh.publicKey("switchboardAggregator"),
-  ]);
+  ])
 
   constructor(fields: LotteryPoolFields) {
-    this.mint = fields.mint;
-    this.startTime = fields.startTime;
-    this.endTime = fields.endTime;
-    this.startedAt = fields.startedAt;
-    this.settledAt = fields.settledAt;
-    this.startRate = fields.startRate;
-    this.endRate = fields.endRate;
-    this.holders = fields.holders;
-    this.amounts = fields.amounts;
-    this.supply = fields.supply;
-    this.winner = fields.winner;
-    this.bump = fields.bump;
-    this.switchboardAggregator = fields.switchboardAggregator;
+    this.mint = fields.mint
+    this.startTime = fields.startTime
+    this.endTime = fields.endTime
+    this.startedAt = fields.startedAt
+    this.settledAt = fields.settledAt
+    this.startRate = fields.startRate
+    this.endRate = fields.endRate
+    this.holders = fields.holders
+    this.amounts = fields.amounts
+    this.supply = fields.supply
+    this.winner = fields.winner
+    this.bump = fields.bump
+    this.switchboardAggregator = fields.switchboardAggregator
   }
 
   static async fetch(
@@ -92,16 +92,16 @@ export class LotteryPool {
     address: PublicKey,
     programId: PublicKey = PROGRAM_ID
   ): Promise<LotteryPool | null> {
-    const info = await c.getAccountInfo(address);
+    const info = await c.getAccountInfo(address)
 
     if (info === null) {
-      return null;
+      return null
     }
     if (!info.owner.equals(programId)) {
-      throw new Error("account doesn't belong to this program");
+      throw new Error("account doesn't belong to this program")
     }
 
-    return this.decode(info.data);
+    return this.decode(info.data)
   }
 
   static async fetchMultiple(
@@ -109,26 +109,26 @@ export class LotteryPool {
     addresses: PublicKey[],
     programId: PublicKey = PROGRAM_ID
   ): Promise<Array<LotteryPool | null>> {
-    const infos = await c.getMultipleAccountsInfo(addresses);
+    const infos = await c.getMultipleAccountsInfo(addresses)
 
     return infos.map((info) => {
       if (info === null) {
-        return null;
+        return null
       }
       if (!info.owner.equals(programId)) {
-        throw new Error("account doesn't belong to this program");
+        throw new Error("account doesn't belong to this program")
       }
 
-      return this.decode(info.data);
-    });
+      return this.decode(info.data)
+    })
   }
 
   static decode(data: Buffer): LotteryPool {
     if (!data.slice(0, 8).equals(LotteryPool.discriminator)) {
-      throw new Error("invalid account discriminator");
+      throw new Error("invalid account discriminator")
     }
 
-    const dec = LotteryPool.layout.decode(data.slice(8));
+    const dec = LotteryPool.layout.decode(data.slice(8))
 
     return new LotteryPool({
       mint: dec.mint,
@@ -144,7 +144,7 @@ export class LotteryPool {
       winner: dec.winner,
       bump: dec.bump,
       switchboardAggregator: dec.switchboardAggregator,
-    });
+    })
   }
 
   toJSON(): LotteryPoolJSON {
@@ -162,7 +162,7 @@ export class LotteryPool {
       winner: (this.winner && this.winner.toString()) || null,
       bump: this.bump,
       switchboardAggregator: this.switchboardAggregator.toString(),
-    };
+    }
   }
 
   static fromJSON(obj: LotteryPoolJSON): LotteryPool {
@@ -180,6 +180,6 @@ export class LotteryPool {
       winner: (obj.winner && new PublicKey(obj.winner)) || null,
       bump: obj.bump,
       switchboardAggregator: new PublicKey(obj.switchboardAggregator),
-    });
+    })
   }
 }

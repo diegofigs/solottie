@@ -1,20 +1,16 @@
-import {
-  TransactionInstruction,
-  PublicKey,
-  AccountMeta,
-} from "@solana/web3.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import BN from "bn.js"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as borsh from "@coral-xyz/borsh"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import * as types from "../types"; // eslint-disable-line @typescript-eslint/no-unused-vars
-import { PROGRAM_ID } from "../programId";
+import { TransactionInstruction, PublicKey, AccountMeta } from "@solana/web3.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import BN from "bn.js" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as borsh from "@coral-xyz/borsh" // eslint-disable-line @typescript-eslint/no-unused-vars
+import * as types from "../types" // eslint-disable-line @typescript-eslint/no-unused-vars
+import { PROGRAM_ID } from "../programId"
 
 export interface SettleAccounts {
-  signer: PublicKey;
+  signer: PublicKey
   /** Lottery Pool account stores pool metadata. */
-  lotteryPool: PublicKey;
+  lotteryPool: PublicKey
   /** Mint account is the stakeable token. */
-  mint: PublicKey;
-  switchboardAggregator: PublicKey;
+  mint: PublicKey
+  switchboardAggregator: PublicKey
 }
 
 export function settle(
@@ -30,9 +26,9 @@ export function settle(
       isSigner: false,
       isWritable: false,
     },
-  ];
-  const identifier = Buffer.from([175, 42, 185, 87, 144, 131, 102, 212]);
-  const data = identifier;
-  const ix = new TransactionInstruction({ keys, programId, data });
-  return ix;
+  ]
+  const identifier = Buffer.from([175, 42, 185, 87, 144, 131, 102, 212])
+  const data = identifier
+  const ix = new TransactionInstruction({ keys, programId, data })
+  return ix
 }
