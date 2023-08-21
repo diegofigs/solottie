@@ -10,7 +10,7 @@ export function CreateLotteryForm() {
 
   return (
     <div className="flex flex-col p-2">
-      <CreateLottery startTime={start.getTime()} endTime={end.getTime()} />
+      <CreateLottery startTime={new Date().getTime() + 300000} endTime={end.getTime()} />
       <InfiniteCalendar
         Component={withRange(Calendar)}
         width={300}

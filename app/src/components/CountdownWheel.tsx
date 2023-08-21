@@ -6,10 +6,7 @@ type CountdownWheelProps = {
   endTime: Date;
 };
 
-const CountdownWheel: React.FC<CountdownWheelProps> = ({
-  startTime,
-  endTime,
-}) => {
+function CountdownWheel({ startTime, endTime }: CountdownWheelProps) {
   const now = useMemo(() => new Date(), []);
   const [secondsRemaining, setSecondsRemaining] = useState<number>(
     differenceInSeconds(now < startTime ? startTime : endTime, now)
@@ -67,6 +64,6 @@ const CountdownWheel: React.FC<CountdownWheelProps> = ({
       </svg>
     </div>
   );
-};
+}
 
 export default CountdownWheel;

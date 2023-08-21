@@ -3,12 +3,16 @@ import React from "react";
 type LotteryStatusProps = {
   startTime: Date;
   endTime: Date;
+  startedAt: Date | null;
+  settledAt: Date | null;
 };
 
-const LotteryStatus: React.FC<LotteryStatusProps> = ({
+function LotteryStatus({
   startTime,
   endTime,
-}) => {
+  startedAt,
+  settledAt,
+}: LotteryStatusProps) {
   const now = new Date();
 
   let status = "";
@@ -18,10 +22,10 @@ const LotteryStatus: React.FC<LotteryStatusProps> = ({
     status = "Waiting";
     colorClass = "bg-red-500";
   } else if (now >= startTime && now < endTime) {
-    status = "In Progress";
+    status = startedAt === null ? "Waiting to Start" : "In Progress";
     colorClass = "bg-yellow-500";
   } else {
-    status = "Settled";
+    status = settledAt === null ? "Waiting to Settle" : "Settled";
     colorClass = "bg-green-500";
   }
 
@@ -30,6 +34,6 @@ const LotteryStatus: React.FC<LotteryStatusProps> = ({
       {status}
     </span>
   );
-};
+}
 
 export default LotteryStatus;

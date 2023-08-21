@@ -31,6 +31,8 @@ export const LotteryPoolCard = ({
   );
   const startDate = new Date(pool.startTime.toNumber() * 1000);
   const endDate = new Date(pool.endTime.toNumber() * 1000);
+  const startedAt = pool.startedAt ? new Date(pool.startedAt.toNumber() * 1000) : null;
+  const settledAt = pool.settledAt ? new Date(pool.settledAt.toNumber() * 1000) : null;
 
   const start = format(startDate, "MM/dd/yyyy");
   const end = format(endDate, "MM/dd/yyyy");
@@ -43,7 +45,7 @@ export const LotteryPoolCard = ({
       <div className="p-4">
         <div className="w-full flex justify-between items-center gap-2">
           <h2 className="text-xl truncate">Lottery</h2>
-          <LotteryStatus startTime={startDate} endTime={endDate} />
+          <LotteryStatus startTime={startDate} endTime={endDate} startedAt={startedAt} settledAt={settledAt} />
           {/* Replace with your icon */}
         </div>
         <div className="flex items-center gap-1">
@@ -79,7 +81,7 @@ export const LotteryPoolCard = ({
                   className="group w-60 m-2 btn animate-pulse bg-gradient-to-br from-indigo-500 to-fuchsia-500 hover:from-white hover:to-purple-300 text-black"
                 >
                   <span className="block w-full group-disabled:hidden">
-                    Stake
+                    Go to Pool
                   </span>
                 </Link>
               </div>
