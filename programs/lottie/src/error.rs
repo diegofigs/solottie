@@ -35,6 +35,9 @@ pub enum LottieError {
 
     #[msg("The lottery pool tickets have already been redeemed")]
     AlreadyRedeemed,
+
+    #[msg("The lottery pool cannot be closed because it has deposits")]
+    CannotCloseWithDeposits,
 }
 
 #[error_code]

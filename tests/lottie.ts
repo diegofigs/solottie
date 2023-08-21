@@ -356,6 +356,57 @@ describe("lottie", () => {
     console.debug(`Guest Balance: ${guestBalance.value.uiAmountString}`);
   });
 
+  it("can close pool", async () => {
+    const now = Math.floor(new Date().getTime() / 1_000);
+    const startTime = new anchor.BN(now + STAKE_PERIOD);
+    const endTime = new anchor.BN(now + STAKE_PERIOD + SETTLE_PERIOD);
+
+    const [lotteryPool] = PublicKey.findProgramAddressSync(
+      [
+        Buffer.from(STAKE_POOL_SEED),
+        startTime.toBuffer("le", 8),
+        endTime.toBuffer("le", 8),
+        BSOL.toBuffer(),
+      ],
+      program.programId
+    );
+
+    const { ticketMint, stakeToken } = getAccounts(
+      payer.publicKey,
+      lotteryPool
+    );
+
+    const ticketMintMetadata = await Metadata.getPDA(ticketMint);
+    await program.methods
+      .createPool(startTime, endTime, "bSOL")
+      .accounts({
+        signer: payer.publicKey,
+        lotteryPool,
+        stakeToken,
+        ticketMint,
+        ticketMintMetadata,
+        mint: BSOL,
+        switchboardAggregator: aggregatorAccount.publicKey,
+        tokenMetadataProgram: MetadataProgram.PUBKEY,
+      })
+      .signers([payer.payer])
+      .rpc();
+
+    await program.methods
+      .closePool()
+      .accounts({
+        signer: payer.publicKey,
+        lotteryPool,
+      })
+      .signers([payer.payer])
+      .rpc();
+
+    try {
+      const deletedPool = await program.account.lotteryPool.fetch(lotteryPool);
+      console.debug(deletedPool);
+    } catch (err) {}
+  });
+
   async function mintPoolTokens(
     connection: Connection,
     wallet: anchor.Wallet,

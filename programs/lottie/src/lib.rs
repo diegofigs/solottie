@@ -38,4 +38,8 @@ pub mod lottie {
     pub fn unstake(ctx: Context<Unstake>) -> Result<()> {
         instructions::unstake(ctx)
     }
+
+    pub fn close_pool(ctx: Context<ClosePool>) -> Result<()> {
+        instructions::close_pool(ctx)
+    }
 }

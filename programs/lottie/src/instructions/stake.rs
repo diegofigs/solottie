@@ -75,8 +75,7 @@ pub struct Stake<'info> {
 }
 
 pub fn stake(ctx: Context<Stake>, amount: u64) -> Result<()> {
-    let clock = Clock::get()?;
-    if clock.unix_timestamp > ctx.accounts.lottery_pool.start_time {
+    if ctx.accounts.lottery_pool.started_at.is_some() {
         return err!(LottieError::PastStakePeriod);
     }
 
