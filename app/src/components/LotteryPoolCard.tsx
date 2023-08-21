@@ -9,6 +9,7 @@ import LotteryStatus from "./LotteryStatus";
 import { format } from "date-fns";
 import { Start } from "./Start";
 import { Settle } from "./Settle";
+import { CloseLottery } from "./CloseLottery";
 
 type LotteryPoolCardProps = {
   pool: LotteryPool;
@@ -31,8 +32,13 @@ export const LotteryPoolCard = ({
   );
   const startDate = new Date(pool.startTime.toNumber() * 1000);
   const endDate = new Date(pool.endTime.toNumber() * 1000);
-  const startedAt = pool.startedAt ? new Date(pool.startedAt.toNumber() * 1000) : null;
-  const settledAt = pool.settledAt ? new Date(pool.settledAt.toNumber() * 1000) : null;
+  const startedAt = pool.startedAt
+    ? new Date(pool.startedAt.toNumber() * 1000)
+    : null;
+  const settledAt = pool.settledAt
+    ? new Date(pool.settledAt.toNumber() * 1000)
+    : null;
+  console.log(pool.holders);
 
   const start = format(startDate, "MM/dd/yyyy");
   const end = format(endDate, "MM/dd/yyyy");
@@ -45,7 +51,12 @@ export const LotteryPoolCard = ({
       <div className="p-4">
         <div className="w-full flex justify-between items-center gap-2">
           <h2 className="text-xl truncate">Lottery</h2>
-          <LotteryStatus startTime={startDate} endTime={endDate} startedAt={startedAt} settledAt={settledAt} />
+          <LotteryStatus
+            startTime={startDate}
+            endTime={endDate}
+            startedAt={startedAt}
+            settledAt={settledAt}
+          />
           {/* Replace with your icon */}
         </div>
         <div className="flex items-center gap-1">
@@ -90,6 +101,7 @@ export const LotteryPoolCard = ({
         )}
         {crank && (
           <div>
+            {pool.holders.length === 0 && <CloseLottery id={poolPDA} />}
             {startDate.getTime() < now.getTime() && pool.startedAt === null && (
               <Start
                 id={poolPDA}
