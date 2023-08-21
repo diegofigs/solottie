@@ -8,27 +8,9 @@ export const Footer: FC = () => {
         <div className="ml-12 py-12 mr-12">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-2 md:gap-8 md:space-x-12 relative">
             <div className="flex flex-col col-span-2 mx-4 items-center md:items-start">
-              <div className="flex flex-row ml-1">
-                <Link
-                  href="https://solana.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  passHref
-                  className="text-secondary hover:text-white"
-                >
-                  <div className="flex flex-row ml-1">
-                    <Image
-                      src="/solanaLogo.png"
-                      alt="solana icon"
-                      width={156}
-                      height={96}
-                    />
-                  </div>
-                </Link>
-              </div>
               <div className="flex md:ml-2">
                 <a
-                  href="https://twitter.com/solana_devs"
+                  href="https://twitter.com/diegofigs"
                   type="button"
                   className="border-white text-secondary hover:text-white leading-normal hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out w-9 h-9 m-1"
                 >
@@ -49,7 +31,7 @@ export const Footer: FC = () => {
                   </svg>
                 </a>
                 <a
-                  href="https://github.com/solana-labs"
+                  href="https://github.com/diegofigs/solottie"
                   type="button"
                   className="border-white text-secondary hover:text-white leading-normal hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out w-9 h-9 m-1"
                 >
@@ -71,7 +53,7 @@ export const Footer: FC = () => {
                 </a>
               </div>
               <div className="mb-6 m-1 sm:text-left place-items-start items-start font-normal tracking-tight text-secondary">
-                © 2023 Solana Foundation
+                Made by diegofigs
               </div>
             </div>
           </div>
