@@ -38,7 +38,6 @@ export const LotteryPoolCard = ({
   const settledAt = pool.settledAt
     ? new Date(pool.settledAt.toNumber() * 1000)
     : null;
-  console.log(pool.holders);
 
   const start = format(startDate, "MM/dd/yyyy");
   const end = format(endDate, "MM/dd/yyyy");
