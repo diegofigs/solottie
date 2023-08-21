@@ -29,3 +29,7 @@ Main integration test goes thru a full round of lottery by mocking a price feed 
 - Implement better source of randomness (currently xorshift of slot)
 
 - Deploy on Mainnet
+
+### Design
+![image](https://github.com/diegofigs/solottie/assets/12281609/067cc8b2-341a-41cb-bc72-0eaf351e2f85)
+
