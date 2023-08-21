@@ -23,7 +23,10 @@ const Pools: NextPage = ({
       </Head>
       <div className="md:hero mx-auto p-2">
         <div className="md:hero-content flex flex-col">
-          <div className="flex justify-between gap-2 p-2 my-2">
+          <div className="flex justify-between items-center gap-2 p-2 my-2">
+            <h1 className="text-3xl text-primary my-4 text-center">
+              Lottery Pools
+            </h1>
             <Modal title="Create Lottery">
               <CreateLotteryForm />
             </Modal>
