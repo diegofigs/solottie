@@ -1,4 +1,4 @@
-name: "Anchor Test"
+name: "Anchor CI"
 on:
   push:
     branches:
@@ -31,5 +31,5 @@ jobs:
           solana config set -u localhost
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@0.28.0
+      - run: yarn
       - run: anchor test
-        shell: bash
