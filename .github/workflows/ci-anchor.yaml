@@ -1,6 +1,8 @@
 name: "Anchor Test"
 on:
   push:
+    branches:
+      - main
   pull_request:
 
 jobs:
@@ -14,11 +16,8 @@ jobs:
           toolchain: nightly
       - name: Add binaries to PATH
         run: |
-          echo '/root/.cargo/bin/' >> $GITHUB_PATH
-          echo '/root/.avm/bin' >> $GITHUB_PATH
-          echo '/root/.local/share/solana/install/active_release/bin' >> $GITHUB_PATH
-          ln -s /root/.avm $HOME/
-          ln -s /root/.config/solana $HOME/
+          echo '/home/runner/.avm/bin' >> $GITHUB_PATH
+          echo '/home/runner/.local/share/solana/install/active_release/bin' >> $GITHUB_PATH
 
       - name: Setup Solana
         run: |
