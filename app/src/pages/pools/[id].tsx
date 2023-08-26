@@ -12,7 +12,6 @@ import { useQuery } from "@tanstack/react-query";
 import { LotteryPoolCard } from "components/LotteryPoolCard";
 import { StakeCard } from "components/StakeCard";
 // import { MintBsol } from "components/MintBsol";
-import { useNetworkConfiguration } from "contexts/NetworkConfigurationProvider";
 import Link from "next/link";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -44,12 +43,11 @@ export default function Pool({
     queryFn: () => getLotteryPool(new PublicKey(id)),
     initialData: pool,
   });
-  const { networkConfiguration } = useNetworkConfiguration();
   const lotteryPool = LotteryPool.fromJSON(data);
   return (
     <div>
       <Head>
-        <title>Lottie: Pool {id}</title>
+        <title>Solottie: Pool {id}</title>
         <meta name="description" content="A Lottery Protocol on Solana" />
       </Head>
       <div className="md:hero mx-auto p-2">
