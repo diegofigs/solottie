@@ -9,12 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - run: cargo doc
-    - name: Upload Pages artifact
-      uses: actions/upload-pages-artifact@v2
-      with:
-        path: './target/doc/lottie/'
+      - uses: actions/checkout@v3
+      - run: cargo doc --no-deps
+        working-directory: programs/lottie
+      - name: Add index.html
+        run: echo "<meta http-equiv=\"refresh\" content=\"0; url=lottie\">" > target/doc/index.html
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: "./target/doc/"
 
   # Deploy job
   deploy:
@@ -23,8 +26,8 @@ jobs:
 
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
+      pages: write # to deploy to Pages
+      id-token: write # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
