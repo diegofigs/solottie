@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: yarn
       - name: Cache Solana CLI tools
         uses: actions/cache@v3
         with:
@@ -22,12 +23,13 @@ jobs:
           key: solana-cli-${{ runner.os }}-build-1.16.6
       - name: Install Solana CLI tools
         run: sh -c "$(curl -sSfL https://release.solana.com/v1.16.6/install)"
-        shell: bash
       - name: Update PATH
         run: echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
-        shell: bash
+      - name: Setup Keypair
+        run: |
+          solana-keygen new --no-bip39-passphrase
+          solana config set -u localhost
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@0.28.0
-        shell: bash
       - run: anchor test
         shell: bash
