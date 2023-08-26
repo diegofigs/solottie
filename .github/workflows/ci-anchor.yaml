@@ -10,37 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Rust
-        uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          toolchain: nightly
-      - name: Add binaries to PATH
-        run: |
-          echo '/home/runner/.avm/bin' >> $GITHUB_PATH
-          echo '/home/runner/.local/share/solana/install/active_release/bin' >> $GITHUB_PATH
-
-      - name: Setup Solana
-        run: |
-          sh -c "$(curl -sSfL https://release.solana.com/v1.16.10/install)"
-          solana-keygen new --no-bip39-passphrase
-          solana config set --url http:localhost:8899
-      - run: solana config get
-
-      - name: Setup Anchor
-        run: |
-          cargo install --git https://github.com/project-serum/anchor avm --locked --force && \
-          avm install 0.28.0 && \
-          avm use 0.28.0
-
-      - name: Info on AVM
-        run: |
-          avm list
-          avm use 0.28.0
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: 'yarn'
+      - uses: metadaoproject/setup-anchor@v1.1
+        with: 
+          anchor-version: '0.28.0' 
+          solana-cli-version: '1.16.6'
+          node-version: '18.12.1'
 
       - run: yarn
       - run: anchor test
