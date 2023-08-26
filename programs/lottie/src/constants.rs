@@ -1,3 +1,5 @@
+//! Lottie program constants
+
 pub const ID: &str = "8YZFrq9JddGrgu2Q7jeeoJysbP1qC6Nck54N4AKT3BGF";
 
 pub const CONFIG_SEED: &[u8] = b"config";

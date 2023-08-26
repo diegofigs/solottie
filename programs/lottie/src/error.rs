@@ -1,4 +1,5 @@
-//! Solchemist program errors
+//! Lottie program errors
+
 use anchor_lang::prelude::*;
 
 #[error_code]
