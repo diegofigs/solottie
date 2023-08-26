@@ -1,45 +1,47 @@
-name: Anchor Test
-
+name: "Anchor Test"
 on:
   push:
-     branches: [ main, develop ]
   pull_request:
-     branches: [ main ]
 
 jobs:
-  anchor-test:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
-    # from https://github.com/ochaloup/projectserum-build-docker
-    container: docker.io/ochaloup/projectserum-build:v0.28.0_sol1.16.4_avm
     steps:
-      - name: /root/.cargo to PATH
+      - uses: actions/checkout@v3
+      - name: Setup Rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: nightly
+      - name: Add binaries to PATH
         run: |
           echo '/root/.cargo/bin/' >> $GITHUB_PATH
           echo '/root/.avm/bin' >> $GITHUB_PATH
+          echo '/root/.local/share/solana/install/active_release/bin' >> $GITHUB_PATH
           ln -s /root/.avm $HOME/
           ln -s /root/.config/solana $HOME/
+
+      - name: Setup Solana
+        run: |
+          sh -c "$(curl -sSfL https://release.solana.com/v1.16.10/install)"
+          solana-keygen new --no-bip39-passphrase
+          solana config set --url http:localhost:8899
+      - run: solana config get
+
+      - name: Setup Anchor
+        run: |
+          cargo install --git https://github.com/project-serum/anchor avm --locked --force && \
+          avm install 0.28.0 && \
+          avm use 0.28.0
+
       - name: Info on AVM
         run: |
           avm list
           avm use 0.28.0
-      - name: Checkout project
-        uses: actions/checkout@v3
 
-      - name: Install Node.js
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'yarn'
 
-      - name: Set nightly toolchain
-        run: rustup default nightly
-      - name: List rustup toolchains
-        run: rustup toolchain list
-      - name: Check solana config
-        run: solana config get
-
-      - name: Running tests for project
-        run: |
-          yarn
-          yarn test
+      - run: yarn
+      - run: anchor test
