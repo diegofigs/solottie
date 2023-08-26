@@ -33,3 +33,4 @@ jobs:
         run: yarn global add @coral-xyz/anchor-cli@0.28.0
       - run: yarn
       - run: anchor test
+        shell: bash
