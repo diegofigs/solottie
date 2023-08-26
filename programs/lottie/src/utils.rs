@@ -1,3 +1,5 @@
+//! Lottie program util functions
+
 use std::ops::{Div, Mul};
 
 /// Converts a `u64` value - in this case the balance of a token account - into
