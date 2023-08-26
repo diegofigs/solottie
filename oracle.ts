@@ -1,12 +1,35 @@
 import * as anchor from "@coral-xyz/anchor";
-import { stakePoolInfo } from "@solana/spl-stake-pool";
-import { Connection } from "@solana/web3.js";
+import { OracleJob } from "@switchboard-xyz/common";
 import { NodeOracle, sleep } from "@switchboard-xyz/oracle";
-import { SwitchboardTestContext } from "@switchboard-xyz/solana.js";
+import {
+  AggregatorAccount,
+  SwitchboardTestContext,
+} from "@switchboard-xyz/solana.js";
 import { BLAZESTAKE_POOL } from "./app/src/config";
 
+const createPoolJob = (pool: string) => `
+tasks:
+  - splStakePoolTask:
+      pubkey: ${pool}
+  - cacheTask:
+      cacheItems:
+        - variableName: poolTokenSupply
+          job:
+            tasks:
+              - jsonParseTask:
+                  path: $.uiPoolTokenSupply
+        - variableName: totalStakeLamports
+          job:
+            tasks:
+              - jsonParseTask:
+                  path: $.uiTotalLamports
+  - valueTask:
+      big: \${totalStakeLamports}
+  - divideTask:
+      big: \${poolTokenSupply}
+`;
+
 async function main() {
-  const connection = new Connection("http://localhost:8899");
   const provider = anchor.AnchorProvider.env();
   anchor.setProvider(provider);
   const switchboard = await SwitchboardTestContext.loadFromProvider(provider, {
@@ -53,9 +76,8 @@ async function main() {
   try {
     await oracle.startAndAwait();
     console.log("oracle ready");
-    const conversionRate = await getStakePoolConversionRate(connection);
 
-    const [aggregatorAccount] = await switchboard.createStaticFeed({
+    const [bSolFeed] = await switchboard.queue.createFeed({
       batchSize: 1,
       minRequiredOracleResults: 1,
       minRequiredJobResults: 1,
@@ -63,15 +85,24 @@ async function main() {
       fundAmount: 0.15,
       enable: true,
       slidingWindow: true,
-      value: conversionRate,
+      jobs: [
+        {
+          data: OracleJob.encodeDelimited(
+            OracleJob.fromYaml(createPoolJob(BLAZESTAKE_POOL.toString()))
+          ).finish(),
+        },
+      ],
     });
+    console.info(`bSOL/SOL Feed: ${bSolFeed.publicKey}`);
+
     while (true) {
-      await switchboard.updateStaticFeed(
-        aggregatorAccount,
-        conversionRate + 0.02
-      );
-      const value = await aggregatorAccount.fetchLatestValue();
-      console.log(value);
+      try {
+        const [bSolState] = await bSolFeed.openRoundAndAwaitResult();
+        const bSolValue = AggregatorAccount.decodeLatestValue(bSolState);
+        console.info(`Latest Value: ${bSolValue.toNumber()}`);
+      } catch (err) {
+        console.warn(err);
+      }
       await sleep(10000);
     }
   } catch (error) {
@@ -82,15 +113,3 @@ async function main() {
 }
 
 main();
-
-async function getStakePoolConversionRate(connection: Connection) {
-  let info = await stakePoolInfo(connection, BLAZESTAKE_POOL);
-
-  let solanaAmount = info.details.reserveStakeLamports;
-  for (let i = 0; i < info.details.stakeAccounts.length; i++) {
-    solanaAmount += parseInt(info.details.stakeAccounts[i].validatorLamports);
-  }
-  let tokenAmount = parseInt(info.poolTokenSupply);
-  let conversion = solanaAmount / tokenAmount;
-  return conversion;
-}
