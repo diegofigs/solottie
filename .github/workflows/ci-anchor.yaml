@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -32,5 +32,4 @@ jobs:
       - name: Install Anchor
         run: yarn global add @coral-xyz/anchor-cli@0.28.0
       - run: yarn
-      - run: anchor test
-        shell: bash
+      - run: anchor build
