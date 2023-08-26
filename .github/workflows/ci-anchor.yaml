@@ -9,12 +9,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: metadaoproject/setup-anchor@v1.1
-        with: 
-          anchor-version: '0.28.0' 
-          solana-cli-version: '1.16.6'
-          node-version: '18.12.1'
-
-      - run: yarn
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Cache Solana CLI tools
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/solana/
+            ~/.local/share/solana/
+          key: solana-cli-${{ runner.os }}-build-1.16.6
+      - name: Install Solana CLI tools
+        run: sh -c "$(curl -sSfL https://release.solana.com/v1.16.6/install)"
+        shell: bash
+      - name: Update PATH
+        run: echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
+        shell: bash
+      - name: Install Anchor
+        run: yarn global add @coral-xyz/anchor-cli@0.28.0
+        shell: bash
       - run: anchor test
+        shell: bash
