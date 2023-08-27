@@ -1,9 +1,8 @@
-name: Anchor Verifiable Build
+name: "Anchor Verifiable Build"
 on:
   push:
     branches:
       - main
-  pull_request:
   workflow_dispatch:
 
 env:
@@ -22,7 +21,7 @@ jobs:
       - name: Build
         run: |
           echo "appName=$(cargo metadata --no-deps --format-version 1 | jq --raw-output '.packages[0].name')" >> $GITHUB_ENV 
-          anchor build --verifiable --docker-image "backpackapp/build:v${{ env.anchor }}"
+          anchor build --verifiable --docker-image backpackapp/build:v${{ env.anchor }}
       - name: Generate Checksum
         run: |
           echo "checksum=$(sha256sum ./target/verifiable/${{ env.appName }}.so | head -c 64)" >> $GITHUB_ENV

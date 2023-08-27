@@ -36,6 +36,6 @@ jobs:
           node-version: 18
           cache: yarn
       - name: Install Anchor
-        run: yarn global add "@coral-xyz/anchor-cli@${{ env.anchor }}"
+        run: yarn global add @coral-xyz/anchor-cli@${{ env.anchor }}
       - run: yarn
       - run: anchor build
