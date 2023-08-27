@@ -5,31 +5,37 @@ on:
       - main
   pull_request:
 
+env:
+  anchor: 0.28.0
+  solana: 1.16.6
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: yarn
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - name: Cache Solana CLI tools
         uses: actions/cache@v3
         with:
           path: |
             ~/.cache/solana/
             ~/.local/share/solana/
-          key: solana-cli-${{ runner.os }}-build-1.16.6
+          key: solana-cli-${{ runner.os }}-build-${{ env.solana }}
       - name: Install Solana CLI tools
-        run: sh -c "$(curl -sSfL https://release.solana.com/v1.16.6/install)"
+        run: sh -c "$(curl -sSfL https://release.solana.com/v${{ env.solana }}/install)"
       - name: Update PATH
         run: echo "/home/runner/.local/share/solana/install/active_release/bin" >> $GITHUB_PATH
       - name: Setup Keypair
         run: |
           solana-keygen new --no-bip39-passphrase
           solana config set -u localhost
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: yarn
       - name: Install Anchor
-        run: yarn global add @coral-xyz/anchor-cli@0.28.0
+        run: yarn global add "@coral-xyz/anchor-cli@${{ env.anchor }}"
       - run: yarn
       - run: anchor build
