@@ -1,0 +1,31 @@
+name: "Anchor Verifiable Build"
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  anchor: 0.28.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Anchor
+        run: |
+          npm install -g @coral-xyz/anchor-cli@${{ env.anchor }}
+          anchor --version
+      - name: Build
+        run: |
+          echo "appName=$(cargo metadata --no-deps --format-version 1 | jq --raw-output '.packages[0].name')" >> $GITHUB_ENV 
+          anchor build --verifiable --docker-image backpackapp/build:v${{ env.anchor }}
+      - name: Generate Checksum
+        run: |
+          echo "checksum=$(sha256sum ./target/verifiable/${{ env.appName }}.so | head -c 64)" >> $GITHUB_ENV
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.appName }}-${{ env.checksum }}
+          path: ./target/verifiable/${{ env.appName }}.so

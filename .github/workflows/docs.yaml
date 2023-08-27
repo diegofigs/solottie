@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: actions-rust-lang/setup-rust-toolchain@v1
       - run: cargo doc --no-deps
         working-directory: programs/lottie
       - name: Add index.html
